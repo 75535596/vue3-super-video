@@ -6,7 +6,9 @@
     @mouseleave="mouseleaveHandler"
   >
     <div class="video-container" :id="`hk-${videoRandomId}`"></div>
-    <div class="video-mask" v-loading="videoLoading" element-loading-text="加载中..."></div>
+    <div class="video-mask" v-if="videoLoading">
+      <span class="loading-text">加载中...</span>
+    </div>
     <div
       v-show="showBtn"
       ref="videoBtnRef"
@@ -28,8 +30,6 @@
           height: 100%;
         "
       >
-        <!-- <el-input v-model="urlInput" style="width: 50%;" placeholder="ws地址" />
-        <el-button @click="handleUrlInput" type="primary">确定</el-button> -->
         <span title="全屏" class="full-title" @click="doEmits">全屏</span>
       </div>
     </div>
@@ -48,7 +48,6 @@ import {
   onBeforeUnmount,
 } from 'vue'
 import hkVideo from './hk/hkVideo.ts'
-import { ElMessage } from 'element-plus'
 
 const videoRandomId = parseInt(Math.random() * 999999999 + '')
 
@@ -304,8 +303,14 @@ function handleUrlInput() {
   pointer-events: none;
   width: 100%;
   height: 100%;
-  :deep(.el-loading-mask) {
-    background: transparent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  .loading-text {
+    color: #fff;
+    font-size: 14px;
+    text-shadow: 0 0 4px rgba(0, 0, 0, 0.5);
   }
 }
 .video-button {

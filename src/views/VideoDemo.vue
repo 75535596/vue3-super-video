@@ -12,6 +12,8 @@ const videoData = reactive({
   showClose: true,
   // 是否支持全屏
   hasFullScreen: true,
+  // 无信号提示
+  noSignalText: '没信号',
   // 显示树
   showTree: true,
   // 树数据
@@ -28,7 +30,7 @@ const videoData = reactive({
               videoModel: 'easyplayer',
               id: '111',
               label: '视频A--1视频A--1视频A--1',
-              url: 'https://test-streams.mux.dev/x36xhzz/x36xhzz1.m3u8',
+              url: '',
               deviceId: 'a1',
               channelId: 'a11',
               icontype: 'on',
@@ -193,6 +195,9 @@ const videoData = reactive({
   videoError: () => {
     console.log('视频错误回调函数')
   },
+  maxCountError: (index) => {
+    console.log(`视频分屏 ${index} 已达到最大错误次数`);
+  },
 })
 
 // 视频操作事件
@@ -276,10 +281,15 @@ onMounted(() => {
 function changeSplitHandler(num: number) {
   console.log('分屏模式：如1,2,3代表单屏，四屏，九屏', num)
 }
+
+function toggleLive() {
+  videoData.videoConfig.isLive = !videoData.videoConfig.isLive;
+}
 </script>
 <template>
   <div class="video-demo">
     <h1 class="title" style="color: #fff" v-sline>视频组件(国标28181 + 海康威视)</h1>
+    <button @click="toggleLive">切换 isLive</button>
     <SuperVideo class="superVideo" ref="superVideoRef" v-bind="videoData" v-on="videoEvent" @changeSplit='changeSplitHandler'>
       <!-- 自定义插槽
       <template #video-tree><span>左侧树-自定义插槽</span></template>

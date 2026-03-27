@@ -1,5 +1,4 @@
 import { ref, reactive, nextTick } from 'vue'
-import { ElMessage } from 'element-plus'
 export default class hkVideo {
   public hkVideoInfo: any
   constructor(options) {

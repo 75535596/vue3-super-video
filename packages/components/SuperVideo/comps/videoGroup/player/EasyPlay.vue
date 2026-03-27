@@ -88,6 +88,15 @@ watch(
   { immediate: true }
 )
 
+watch(
+  () => props.isLive,
+  (nv, ov) => {
+    if (nv !== ov && props.videoUrl) {
+      onReplay(props.videoUrl)
+    }
+  },
+)
+
 function onPlayer(videoUrl) {
   playerInfo.isPlay = true
   setTimeout(
@@ -107,26 +116,20 @@ function onPlayer(videoUrl) {
   )
 }
 function onDestroy() {
-  try {
-    return new Promise<void>((resolve) => {
-      try {
-        if (player.value) {
-          player.value.destroy()
-          player.value = null
-        }
-      } catch (error) {
-        console.warn('销毁失败:',error)
+  return new Promise<void>((resolve) => {
+    try {
+      if (player.value) {
+        player.value.destroy()
+        player.value = null
       }
-      setTimeout(() => {
-        resolve()
-      }, 100)
-    })
-  } catch (error) {
+    } catch (error) {
+      console.warn('销毁播放器实例时发生错误:', error)
+    }
+    // Always resolve after a short delay to ensure cleanup.
     setTimeout(() => {
-      console.error('888==>onDestroy失败:',error)
       resolve()
     }, 100)
-  }
+  })
 }
 function onReplay(videoUrl) {
   onDestroy().then(() => {

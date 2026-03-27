@@ -4,31 +4,8 @@ import copy from 'rollup-plugin-copy'
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 
-import postcssPrefixSelector from 'postcss-prefix-selector'
-
 // https://vite.dev/config/
 export default defineConfig({
-  css: {
-    postcss: {
-      plugins: [
-        postcssPrefixSelector({
-          prefix: '.ep',
-          transform: (prefix, selector, prefixedSelector, filePath) => {
-            if (filePath.includes('node_modules/element-plus')) {
-              if (selector.startsWith('.el-')) {
-                return prefixedSelector
-              }
-              if (selector.startsWith('body')) {
-                return 'body'
-              }
-              return selector
-            }
-            return selector
-          }
-        })
-      ]
-    }
-  },
   base: process.env.VITE_BASE_URL || '/vue3-super-video/',
   plugins: [
     vue(),
@@ -51,9 +28,6 @@ export default defineConfig({
       verbose: true, // 显示复制信息
     }),
   ],
-  // optimizeDeps: {
-  //   exclude: ['@vue-office/docx']
-  // },
   resolve: {
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url)),

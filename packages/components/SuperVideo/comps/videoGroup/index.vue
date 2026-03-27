@@ -15,7 +15,7 @@
           @mouseover="showCloseBtnHandler(index)"
           @mouseleave="hideCloseBtnHandler(index)"
         >
-          <span v-if="!url" class="no-signal">无信号</span>
+          <span v-if="!url" class="no-signal">{{ noSignalText }}</span>
           <component
             v-else
             :is="getVideoModel(info)"
@@ -38,12 +38,11 @@
             @connectSuccess="connectSuccessHandler(index)"
             >
           </component>
-          <el-button
+          <button
             v-show="closeBtnStatusList[index] && !!url && showClose"
             @click="closeVideoHandler(index)"
-            type="info"
             class="close-btn"
-            >关闭</el-button
+            >关闭</button
           >
           <div
             class="ctrl-box"
@@ -51,52 +50,35 @@
             v-show="(activeIndex == 1 || isFullScreen) && closeBtnStatusList[index] && !!url"
           >
             <div class="ctrl-left">
-              <el-icon class="ctrl-btn left" @mousedown="ctrlHandler('left', info)"
-                ><CaretLeft
-              /></el-icon>
-              <el-icon class="ctrl-btn top" @mousedown="ctrlHandler('top', info)"
-                ><CaretTop
-              /></el-icon>
-              <el-icon class="ctrl-btn right" @mousedown="ctrlHandler('right', info)"
-                ><CaretRight
-              /></el-icon>
-              <el-icon class="ctrl-btn bottom" @mousedown="ctrlHandler('bottom', info)"
-                ><CaretBottom
-              /></el-icon>
-              <el-icon
+              <span class="ctrl-btn left" @mousedown="ctrlHandler('left', info)">←</span>
+              <span class="ctrl-btn top" @mousedown="ctrlHandler('top', info)">↑</span>
+              <span class="ctrl-btn right" @mousedown="ctrlHandler('right', info)">→</span>
+              <span class="ctrl-btn bottom" @mousedown="ctrlHandler('bottom', info)">↓</span>
+              <span
                 class="ctrl-btn speak"
                 :class="[speakStatue ? 'running' : '']"
                 @mousedown="ctrlHandler('speak', info)"
-                ><Microphone
-              /></el-icon>
+                >🎤</span
+              >
               <div class="ctrl-btn-speed">
                 <span class="speed-title">速度：</span>
-                <el-slider
+                <input
+                  type="range"
                   class="slid-btn"
                   v-model="slidValue"
-                  :step="5"
-                  :max="255"
-                  :show-tooltip="false"
+                  step="5"
+                  min="0"
+                  max="255"
                   @change="slidHandler(info)"
                 />
               </div>
             </div>
             <div class="ctrl-right">
-              <el-icon class="ctrl-btn zoom-in" @mousedown="ctrlHandler('zoom-in', info)"
-                ><ZoomIn
-              /></el-icon>
-              <el-icon class="ctrl-btn zoom-out" @mousedown="ctrlHandler('zoom-out', info)"
-                ><ZoomOut
-              /></el-icon>
-              <el-icon class="ctrl-btn scan" @mousedown="ctrlHandler('scan', info)"
-                ><Files
-              /></el-icon>
-              <el-icon class="ctrl-btn cruise" @mousedown="ctrlHandler('cruise', info)"
-                ><MapLocation
-              /></el-icon>
-              <el-icon class="ctrl-btn call" @mousedown="ctrlHandler('call', info)"
-                ><VideoCamera
-              /></el-icon>
+              <span class="ctrl-btn zoom-in" @mousedown="ctrlHandler('zoom-in', info)">🔍+</span>
+              <span class="ctrl-btn zoom-out" @mousedown="ctrlHandler('zoom-out', info)">🔍-</span>
+              <span class="ctrl-btn scan" @mousedown="ctrlHandler('scan', info)">📂</span>
+              <span class="ctrl-btn cruise" @mousedown="ctrlHandler('cruise', info)">📍</span>
+              <span class="ctrl-btn call" @mousedown="ctrlHandler('call', info)">📹</span>
             </div>
           </div>
           <template v-if="injectedSlots?.['video-player-cover']">
@@ -113,7 +95,6 @@ import SplitIcon from '../group/SplitIcon.vue'
 
 // console.log('---------------->', LivePlayer)
 
-import { ElMessage } from 'element-plus'
 import { nextTick, inject, ref, defineProps, onMounted, onUnmounted, computed } from 'vue'
 import EasyPlayView  from './player/EasyPlay.vue'
 import HKPlayView  from './player/HKPlay.vue'
@@ -177,6 +158,10 @@ const props = defineProps({
   videoConfig: {
     type: Object,
     default: () => {},
+  },
+  noSignalText: {
+    type: String,
+    default: '无信号',
   },
 })
 
@@ -269,7 +254,7 @@ function slidHandler(info) {
 function toggleFullScreen(index) {
   try {
     if(hasFullScreen + '' === 'false') {
-      ElMessage.info('当前视频不支持全屏')
+      console.info('[SuperVideo] 当前视频不支持全屏')
       return
     }
   } catch (error) {

@@ -54,6 +54,7 @@
           :class="['video-player-center', !showTree ? 'no-tree' : '']"
           :videoConfig
           :videoErrorMaxCount
+          :noSignalText="noSignalText"
           @removeVideo="removeVideo"
           @errorVideo="errorVideo"
           @urlError="urlError"
@@ -103,6 +104,11 @@ const props = defineProps({
   showClose: {
     type: Boolean,
     default: true,
+  },
+  // 无信号提示
+  noSignalText: {
+    type: String,
+    default: '无信号',
   },
   // 是否支持全屏
   hasFullScreen: {
@@ -237,6 +243,10 @@ const props = defineProps({
     default: null,
   },
   videoError: {
+    type: Function,
+    default: null,
+  },
+  maxCountError: {
     type: Function,
     default: null,
   },
@@ -443,6 +453,9 @@ provide('showVideoCtrls', props.showVideoCtrls)
 provide('slidValue', slidValue)
 provide('showClose', props.showClose)
 provide('hasFullScreen', props.hasFullScreen + '' === 'false' ? false : true)
+
+const videoConfigVal = computed(() => props.videoConfig)
+provide('videoConfig', videoConfigVal)
 
 watch(
   () => activeIndex.value,
@@ -689,6 +702,7 @@ function errorVideo(index, toNext = true) {
       console.error(`视频 ${index} 达到最大重连次数，已停止重连。`);
       removeVideo(index, toNext);
       props.videoError?.(index);
+      props.maxCountError?.(index);
     }
   } else {
     removeVideo(index, toNext);
