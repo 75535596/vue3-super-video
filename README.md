@@ -12,7 +12,22 @@
 - **高度可定制**: 提供多个插槽（Slots），允许开发者自定义 UI。
 - **单点播放**: 可配置视频流是否只允许在一个窗口播放。
 
+## SuperVideo
+
+![emh1eWluZw==](https://tc-cdn.processon.com/po/605c2da663768970077b1422-695db61dbffe264705f9b033)
+
 ## 如何使用
+
+**前置准备：**
+
+1. 复制播放器资源：`js文件夹` 到 `public/` 目录中
+2. 复制播放器资源：`cdn文件夹` 到 `public/` 目录中
+3. 在 `index.html` 中引入：
+
+```html
+<script src="./js/EasyPlayer-pro.js"></script>
+<script src="./cdn/h5player/h5player.min.js"></script>
+```
 
 在您的 Vue 组件中，您可以像这样使用 `SuperVideo` 组件：
 

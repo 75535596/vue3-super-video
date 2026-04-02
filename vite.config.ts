@@ -46,6 +46,8 @@ export default defineConfig({
         'vue',
         'pinia',
         'axios',
+        'element-plus',
+        /^element-plus\/.*/,
         'vue-router',
         'vue3-pdf-app',
         '@vue-office/docx',
@@ -59,6 +61,7 @@ export default defineConfig({
         globals: {
           vue: 'Vue',
           echarts: 'echarts',
+          'element-plus': 'ElementPlus',
           axios: 'axios',
           pinia: 'Pinia',
           'vue-router': 'VueRouter',
